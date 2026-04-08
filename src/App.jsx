@@ -2,7 +2,7 @@
 // Main orchestrator — all heavy logic lives in tabs/ and utils/
 
 import { useState, useEffect } from "react";
-import C from "./theme";
+import themes from "./theme";
 import {
   generateCandidates,
   parseCSV,
@@ -40,6 +40,9 @@ export default function App() {
   const [loadingExplain, setLoadingExplain] = useState(false);
   const [tab,            setTab]            = useState("candidates");
   const [csvError,       setCsvError]       = useState("");
+  const [mode,           setMode]           = useState("dark");
+
+  const C = themes[mode];
 
   // ── Derived data ─────────────────────────────────────────────────────────
   const candidates = rawCandidates.map(c => {
@@ -127,6 +130,12 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
           </h1>
         </div>
         <div style={{ display: "flex", gap: 20 }}>
+          <button
+            onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+            style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "6px 12px", borderRadius: 6, cursor: "pointer", fontSize: 10, fontFamily: "monospace" }}
+          >
+            {mode === "dark" ? "☀ Light" : "🌙 Dark"}
+          </button>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontSize: 9, color: C.muted, textTransform: "uppercase", letterSpacing: 1 }}>Mitigation</div>
             <div style={{ fontSize: 11, color: mitigated ? C.green : C.yellow, fontWeight: 700 }}>
@@ -174,6 +183,7 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
             onRegenerate={() => { setRawCandidates(generateCandidates(16)); setMitigated(false); setSelected(null); }}
             onMitigate={runMitigation}
             onRemoveMitigation={() => { setMitigated(false); setShowComparison(false); }}
+            C={C}
           />
         )}
         {tab === "upload" && (
@@ -181,10 +191,11 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
             csvError={csvError}
             onFileUpload={handleFileUpload}
             onReset={() => { setRawCandidates(generateCandidates(16)); setMitigated(false); setTab("candidates"); }}
+            C={C}
           />
         )}
         {tab === "fairness" && (
-          <FairnessTab candidates={candidates} fairness={fairness} />
+          <FairnessTab candidates={candidates} fairness={fairness} C={C} />
         )}
         {tab === "explain" && (
           <ExplainTab
@@ -192,6 +203,7 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
             mitigated={mitigated}
             explanation={explanation}
             loadingExplain={loadingExplain}
+            C={C}
           />
         )}
         {tab === "mitigation" && (
@@ -202,6 +214,7 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
             showComparison={showComparison}
             mitigating={mitigating}
             onRunMitigation={runMitigation}
+            C={C}
           />
         )}
         {tab === "chat" && (
@@ -211,6 +224,7 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
             fairnessBefore={fairnessBefore}
             fairnessAfter={fairnessAfter}
             mitigated={mitigated}
+            C={C}
           />
         )}
       </div>

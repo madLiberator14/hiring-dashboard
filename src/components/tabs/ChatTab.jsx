@@ -1,7 +1,6 @@
 // src/components/tabs/ChatTab.jsx
 
 import { useRef, useEffect, useState } from "react";
-import C from "../../theme";
 
 const SUGGESTIONS = [
   "What does DIR < 0.8 mean?",
@@ -14,7 +13,7 @@ const SUGGESTIONS = [
   "What is a black-box AI?",
 ];
 
-export default function ChatTab({ candidates, fairness, fairnessBefore, fairnessAfter, mitigated }) {
+export default function ChatTab({ candidates, fairness, fairnessBefore, fairnessAfter, mitigated, C }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [chatInput,   setChatInput]   = useState("");
   const [chatLoading, setChatLoading] = useState(false);

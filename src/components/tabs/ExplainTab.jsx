@@ -1,11 +1,10 @@
 // src/components/tabs/ExplainTab.jsx
 
 import { useState } from "react";
-import C from "../../theme";
 import { SHAPBar, LIMEBar } from "../SharedComponents";
 import { getSHAP, getLIME } from "../../utils/dataUtils";
 
-export default function ExplainTab({ selected, mitigated, explanation, loadingExplain }) {
+export default function ExplainTab({ selected, mitigated, explanation, loadingExplain, C }) {
   const [explainMode, setExplainMode] = useState("shap"); // "shap" | "lime" | "compare"
 
   if (!selected) {
@@ -87,7 +86,7 @@ export default function ExplainTab({ selected, mitigated, explanation, loadingEx
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, marginBottom: 12 }}>
               SHAP Feature Contributions
             </div>
-            {shap.map(s => <SHAPBar key={s.feature} {...s} />)}
+            {shap.map(s => <SHAPBar key={s.feature} {...s} C={C} />)}
             <div style={{ fontSize: 9, color: C.muted, marginTop: 8, borderTop: `1px solid ${C.border}`, paddingTop: 8 }}>
               ⚠ Yellow = bias factor · Green = positive · Red = negative
               {mitigated ? " · Bias neutralized" : ""}
@@ -121,11 +120,11 @@ export default function ExplainTab({ selected, mitigated, explanation, loadingEx
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
           <div style={{ background: C.panel, borderRadius: 10, padding: 16, border: `1px solid ${C.border}` }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, marginBottom: 12 }}>SHAP Values</div>
-            {shap.map(s => <SHAPBar key={s.feature} {...s} />)}
+            {shap.map(s => <SHAPBar key={s.feature} {...s} C={C} />)}
           </div>
           <div style={{ background: C.panel, borderRadius: 10, padding: 16, border: `1px solid ${C.border}` }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent2, marginBottom: 12 }}>LIME Sensitivities</div>
-            {lime.map(l => <LIMEBar key={l.feature} {...l} />)}
+            {lime.map(l => <LIMEBar key={l.feature} {...l} C={C} />)}
           </div>
           <AIPanel />
         </div>
