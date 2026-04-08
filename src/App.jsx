@@ -41,6 +41,11 @@ export default function App() {
   const [tab,            setTab]            = useState("candidates");
   const [csvError,       setCsvError]       = useState("");
   const [mode,           setMode]           = useState("dark");
+  const [searchText,     setSearchText]     = useState("");
+  const [filterGender,   setFilterGender]   = useState("all");
+  const [filterEducation, setFilterEducation] = useState("all");
+  const [filterOutcome,  setFilterOutcome]  = useState("all");
+  const [sortKey,        setSortKey]        = useState("scoreDesc");
 
   const C = themes[mode];
 
@@ -56,6 +61,26 @@ export default function App() {
   const fairnessBefore = rawCandidates.length ? computeFairness(rawCandidates.map(c => ({ ...c, hired: scoreBiased(c) >= 6.5 }))) : null;
   const fairnessAfter  = rawCandidates.length ? computeFairness(rawCandidates.map(c => ({ ...c, hired: scoreFair(c)  >= 6.5 }))) : null;
 
+  const genderOptions = ["all", ...Array.from(new Set(rawCandidates.map(c => c.gender))).sort()];
+  const educationOptions = ["all", ...Array.from(new Set(rawCandidates.map(c => c.education))).sort()];
+
+  const filteredCandidates = candidates
+    .filter(c => {
+      const search = searchText.trim().toLowerCase();
+      const matchesSearch = !search || [c.name, c.gender, c.ethnicity, c.education].some(value => value.toLowerCase().includes(search));
+      const matchesGender = filterGender === "all" || c.gender === filterGender;
+      const matchesEducation = filterEducation === "all" || c.education === filterEducation;
+      const matchesOutcome = filterOutcome === "all" || (filterOutcome === "hired" ? c.hired : !c.hired);
+      return matchesSearch && matchesGender && matchesEducation && matchesOutcome;
+    })
+    .sort((a, b) => {
+      if (sortKey === "scoreDesc") return b.score - a.score;
+      if (sortKey === "scoreAsc") return a.score - b.score;
+      if (sortKey === "expDesc") return b.years_exp - a.years_exp;
+      if (sortKey === "expAsc") return a.years_exp - b.years_exp;
+      return 0;
+    });
+
   useEffect(() => { setRawCandidates(generateCandidates(16)); }, []);
 
   // ── Handlers ─────────────────────────────────────────────────────────────
@@ -65,6 +90,7 @@ export default function App() {
       if (!parsed.length) throw new Error("No rows found");
       setRawCandidates(parsed);
       setMitigated(false); setSelected(null); setExplanation(""); setCsvError(""); setTab("candidates");
+      setSearchText(""); setFilterGender("all"); setFilterEducation("all"); setFilterOutcome("all"); setSortKey("scoreDesc");
     } catch {
       setCsvError("Could not parse CSV. Ensure headers: name, gender, ethnicity, education, gpa, years_exp, technical_skills, soft_skills, certifications");
     }
@@ -175,12 +201,33 @@ Write 4-5 sentences: (1) Top merit factors. (2) How bias impacted the score. (3)
       <div style={{ padding: 20 }}>
         {tab === "candidates" && (
           <CandidatesTab
-            candidates={candidates}
+            candidates={filteredCandidates}
             selected={selected}
             mitigated={mitigated}
             mitigating={mitigating}
+            searchText={searchText}
+            filterGender={filterGender}
+            filterEducation={filterEducation}
+            filterOutcome={filterOutcome}
+            sortKey={sortKey}
+            genderOptions={genderOptions}
+            educationOptions={educationOptions}
+            onSearchTextChange={setSearchText}
+            onFilterGenderChange={setFilterGender}
+            onFilterEducationChange={setFilterEducation}
+            onFilterOutcomeChange={setFilterOutcome}
+            onSortKeyChange={setSortKey}
             onSelectCandidate={explainCandidate}
-            onRegenerate={() => { setRawCandidates(generateCandidates(16)); setMitigated(false); setSelected(null); }}
+            onRegenerate={() => {
+              setRawCandidates(generateCandidates(16));
+              setMitigated(false);
+              setSelected(null);
+              setSearchText("");
+              setFilterGender("all");
+              setFilterEducation("all");
+              setFilterOutcome("all");
+              setSortKey("scoreDesc");
+            }}
             onMitigate={runMitigation}
             onRemoveMitigation={() => { setMitigated(false); setShowComparison(false); }}
             C={C}

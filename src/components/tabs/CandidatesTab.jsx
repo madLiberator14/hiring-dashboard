@@ -1,12 +1,22 @@
 // src/components/tabs/CandidatesTab.jsx
 
-import { scoreBiased, scoreFair } from "../../utils/dataUtils";
-
 export default function CandidatesTab({
   candidates,
   selected,
   mitigated,
   mitigating,
+  searchText,
+  filterGender,
+  filterEducation,
+  filterOutcome,
+  sortKey,
+  genderOptions,
+  educationOptions,
+  onSearchTextChange,
+  onFilterGenderChange,
+  onFilterEducationChange,
+  onFilterOutcomeChange,
+  onSortKeyChange,
   onSelectCandidate,
   onRegenerate,
   onMitigate,
@@ -16,7 +26,7 @@ export default function CandidatesTab({
   return (
     <div>
       {/* Toolbar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 12 }}>
         <span style={{ fontSize: 11, color: C.muted }}>
           {candidates.filter(c => c.hired).length} hired / {candidates.length} total · Click any card for explanation
         </span>
@@ -44,6 +54,53 @@ export default function CandidatesTab({
             </button>
           )}
         </div>
+      </div>
+
+      {/* Filters */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto auto", gap: 10, marginBottom: 16, alignItems: "center", rowGap: 10 }}>
+        <input
+          value={searchText}
+          onChange={e => onSearchTextChange(e.target.value)}
+          placeholder="Search name, gender, ethnicity, education"
+          style={{ width: "100%", background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 12px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
+        />
+        <select
+          value={filterGender}
+          onChange={e => onFilterGenderChange(e.target.value)}
+          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
+        >
+          {genderOptions.map(option => (
+            <option key={option} value={option}>{option === "all" ? "Gender: All" : option}</option>
+          ))}
+        </select>
+        <select
+          value={filterEducation}
+          onChange={e => onFilterEducationChange(e.target.value)}
+          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
+        >
+          {educationOptions.map(option => (
+            <option key={option} value={option}>{option === "all" ? "Education: All" : option}</option>
+          ))}
+        </select>
+        <select
+          value={filterOutcome}
+          onChange={e => onFilterOutcomeChange(e.target.value)}
+          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
+        >
+          <option value="all">Outcome: All</option>
+          <option value="hired">Hired</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <select
+          value={sortKey}
+          onChange={e => onSortKeyChange(e.target.value)}
+          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
+        >
+          <option value="scoreDesc">Sort: Score ↓</option>
+          <option value="scoreAsc">Sort: Score ↑</option>
+          <option value="expDesc">Sort: Experience ↓</option>
+          <option value="expAsc">Sort: Experience ↑</option>
+        </select>
       </div>
 
       {/* Candidate grid */}
