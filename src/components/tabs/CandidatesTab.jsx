@@ -1,6 +1,5 @@
 // src/components/tabs/CandidatesTab.jsx
 
-import C from "../../theme";
 import { scoreBiased, scoreFair } from "../../utils/dataUtils";
 
 export default function CandidatesTab({
@@ -12,6 +11,7 @@ export default function CandidatesTab({
   onRegenerate,
   onMitigate,
   onRemoveMitigation,
+  C,
 }) {
   return (
     <div>

@@ -1,9 +1,8 @@
 // src/components/tabs/FairnessTab.jsx
 
-import C from "../../theme";
 import { Gauge } from "../SharedComponents";
 
-export default function FairnessTab({ candidates, fairness }) {
+export default function FairnessTab({ candidates, fairness, C }) {
   if (!fairness) return null;
 
   return (
@@ -14,9 +13,9 @@ export default function FairnessTab({ candidates, fairness }) {
 
       {/* Metric gauges */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 18 }}>
-        <Gauge label="Disparate Impact Ratio (DIR)" value={fairness.dir}            ideal="1.0" range={[0.8, 1.25]} />
-        <Gauge label="Statistical Parity Diff (SPD)" value={Math.abs(fairness.spd)} ideal="0.0" range={[0, 0.1]}   />
-        <Gauge label="Equal Opportunity Diff (EOD)"  value={Math.abs(fairness.eod)} ideal="0.0" range={[0, 0.1]}   />
+        <Gauge label="Disparate Impact Ratio (DIR)" value={fairness.dir}            ideal="1.0" range={[0.8, 1.25]} C={C} />
+        <Gauge label="Statistical Parity Diff (SPD)" value={Math.abs(fairness.spd)} ideal="0.0" range={[0, 0.1]}   C={C} />
+        <Gauge label="Equal Opportunity Diff (EOD)"  value={Math.abs(fairness.eod)} ideal="0.0" range={[0, 0.1]}   C={C} />
       </div>
 
       {/* Breakdown charts */}

@@ -1,6 +1,5 @@
 // src/components/tabs/MitigationTab.jsx
 
-import C from "../../theme";
 import { scoreBiased, scoreFair } from "../../utils/dataUtils";
 
 export default function MitigationTab({
@@ -10,6 +9,7 @@ export default function MitigationTab({
   showComparison,
   mitigating,
   onRunMitigation,
+  C,
 }) {
   if (!showComparison) {
     return (

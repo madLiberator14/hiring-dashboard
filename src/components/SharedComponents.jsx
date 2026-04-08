@@ -1,10 +1,8 @@
 // src/components/SharedComponents.jsx
 // Reusable UI pieces used across multiple tabs
 
-import C from "../theme";
-
 // ── SHAP feature bar ──────────────────────────────────────────────────────────
-export function SHAPBar({ feature, value, raw, isBias, mitigated }) {
+export function SHAPBar({ feature, value, raw, isBias, mitigated, C }) {
   const pct   = Math.min(100, (Math.abs(value) / 2.5) * 100);
   const isPos = value >= 0;
   const color = mitigated && isBias ? C.muted2 : isBias ? C.yellow : isPos ? C.green : C.red;
@@ -38,7 +36,7 @@ export function SHAPBar({ feature, value, raw, isBias, mitigated }) {
 }
 
 // ── LIME sensitivity bar ──────────────────────────────────────────────────────
-export function LIMEBar({ feature, sensitivity, value }) {
+export function LIMEBar({ feature, sensitivity, value, C }) {
   const pct   = Math.min(100, (Math.abs(sensitivity) / 1.5) * 100);
   const isPos = sensitivity >= 0;
 
@@ -68,7 +66,7 @@ export function LIMEBar({ feature, sensitivity, value }) {
 }
 
 // ── Fairness metric gauge ─────────────────────────────────────────────────────
-export function Gauge({ label, value, ideal, range }) {
+export function Gauge({ label, value, ideal, range, C }) {
   const inRange = value >= range[0] && value <= range[1];
   const color   = inRange ? C.green : C.red;
 
