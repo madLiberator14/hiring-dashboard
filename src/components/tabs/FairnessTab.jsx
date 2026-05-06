@@ -1,8 +1,12 @@
 // src/components/tabs/FairnessTab.jsx
 
+
 import { Gauge } from "../SharedComponents";
 
-export default function FairnessTab({ candidates, fairness, C }) {
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
+
+
+export default function FairnessTab({ candidates, fairness }) {
   if (!fairness) return null;
 
   return (
@@ -13,9 +17,9 @@ export default function FairnessTab({ candidates, fairness, C }) {
 
       {/* Metric gauges */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 18 }}>
-        <Gauge label="Disparate Impact Ratio (DIR)" value={fairness.dir}            ideal="1.0" range={[0.8, 1.25]} C={C} />
-        <Gauge label="Statistical Parity Diff (SPD)" value={Math.abs(fairness.spd)} ideal="0.0" range={[0, 0.1]}   C={C} />
-        <Gauge label="Equal Opportunity Diff (EOD)"  value={Math.abs(fairness.eod)} ideal="0.0" range={[0, 0.1]}   C={C} />
+        <Gauge label="Disparate Impact Ratio (DIR)" value={fairness.dir}            ideal="1.0" range={[0.8, 1.25]} />
+        <Gauge label="Statistical Parity Diff (SPD)" value={Math.abs(fairness.spd)} ideal="0.0" range={[0, 0.1]}   />
+        <Gauge label="Equal Opportunity Diff (EOD)"  value={Math.abs(fairness.eod)} ideal="0.0" range={[0, 0.1]}   />
       </div>
 
       {/* Breakdown charts */}

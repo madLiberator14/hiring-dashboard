@@ -1,10 +1,14 @@
 // src/components/tabs/ExplainTab.jsx
 
+
 import { useState } from "react";
 import { SHAPBar, LIMEBar } from "../SharedComponents";
 import { getSHAP, getLIME } from "../../utils/dataUtils";
 
-export default function ExplainTab({ selected, mitigated, explanation, loadingExplain, C }) {
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
+
+
+export default function ExplainTab({ selected, mitigated, explanation, loadingExplain }) {
   const [explainMode, setExplainMode] = useState("shap"); // "shap" | "lime" | "compare"
 
   if (!selected) {
@@ -23,7 +27,7 @@ export default function ExplainTab({ selected, mitigated, explanation, loadingEx
   const AIPanel = () => (
     <div style={{ background: C.panel, borderRadius: 10, padding: 16, border: `1px solid ${C.border}` }}>
       <div style={{ fontSize: 11, fontWeight: 700, color: C.green, marginBottom: 12 }}>
-        AI Audit Explanation (Claude-powered)
+        AI Audit Explanation (Simulated)
       </div>
       {loadingExplain ? (
         <div style={{ textAlign: "center", padding: 30, color: C.muted, fontSize: 11 }}>⚙ Generating explanation...</div>
@@ -86,7 +90,7 @@ export default function ExplainTab({ selected, mitigated, explanation, loadingEx
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, marginBottom: 12 }}>
               SHAP Feature Contributions
             </div>
-            {shap.map(s => <SHAPBar key={s.feature} {...s} C={C} />)}
+            {shap.map(s => <SHAPBar key={s.feature} {...s} />)}
             <div style={{ fontSize: 9, color: C.muted, marginTop: 8, borderTop: `1px solid ${C.border}`, paddingTop: 8 }}>
               ⚠ Yellow = bias factor · Green = positive · Red = negative
               {mitigated ? " · Bias neutralized" : ""}
@@ -120,11 +124,11 @@ export default function ExplainTab({ selected, mitigated, explanation, loadingEx
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
           <div style={{ background: C.panel, borderRadius: 10, padding: 16, border: `1px solid ${C.border}` }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent, marginBottom: 12 }}>SHAP Values</div>
-            {shap.map(s => <SHAPBar key={s.feature} {...s} C={C} />)}
+            {shap.map(s => <SHAPBar key={s.feature} {...s} />)}
           </div>
           <div style={{ background: C.panel, borderRadius: 10, padding: 16, border: `1px solid ${C.border}` }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.accent2, marginBottom: 12 }}>LIME Sensitivities</div>
-            {lime.map(l => <LIMEBar key={l.feature} {...l} C={C} />)}
+            {lime.map(l => <LIMEBar key={l.feature} {...l} />)}
           </div>
           <AIPanel />
         </div>

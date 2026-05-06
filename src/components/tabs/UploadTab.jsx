@@ -1,6 +1,7 @@
 // src/components/tabs/UploadTab.jsx
-
 import { useRef } from "react";
+
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
 
 const SAMPLE_CSV = [
   "name,gender,ethnicity,education,gpa,years_exp,technical_skills,soft_skills,certifications",
@@ -12,7 +13,7 @@ const SAMPLE_CSV = [
   "Aisha Mohammed,Female,Group C,Masters,3.7,4,8,8,2",
 ].join("\n");
 
-export default function UploadTab({ csvError, onFileUpload, onReset, C }) {
+export default function UploadTab({ csvError, onFileUpload, onReset }) {
   const fileRef   = useRef(null);
   const dragRef   = useRef(false);
 

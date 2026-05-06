@@ -1,24 +1,12 @@
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
+
 // src/components/SharedComponents.jsx
+
 // Reusable UI pieces used across multiple tabs
 
-const defaultC = {
-  bg: "#07090f",
-  panel: "#0d1117",
-  panel2: "#111827",
-  border: "#1a2535",
-  accent: "#00d4ff",
-  accent2: "#7c3aed",
-  green: "#10b981",
-  red: "#ef4444",
-  yellow: "#f59e0b",
-  orange: "#f97316",
-  text: "#e2e8f0",
-  muted: "#4b5563",
-  muted2: "#6b7280",
-};
 
 // ── SHAP feature bar ──────────────────────────────────────────────────────────
-export function SHAPBar({ feature, value, raw, isBias, mitigated, C = defaultC }) {
+export function SHAPBar({ feature, value, raw, isBias, mitigated }) {
   const pct   = Math.min(100, (Math.abs(value) / 2.5) * 100);
   const isPos = value >= 0;
   const color = mitigated && isBias ? C.muted2 : isBias ? C.yellow : isPos ? C.green : C.red;
@@ -52,7 +40,7 @@ export function SHAPBar({ feature, value, raw, isBias, mitigated, C = defaultC }
 }
 
 // ── LIME sensitivity bar ──────────────────────────────────────────────────────
-export function LIMEBar({ feature, sensitivity, value, C = defaultC }) {
+export function LIMEBar({ feature, sensitivity, value }) {
   const pct   = Math.min(100, (Math.abs(sensitivity) / 1.5) * 100);
   const isPos = sensitivity >= 0;
 
@@ -82,7 +70,7 @@ export function LIMEBar({ feature, sensitivity, value, C = defaultC }) {
 }
 
 // ── Fairness metric gauge ─────────────────────────────────────────────────────
-export function Gauge({ label, value, ideal, range, C = defaultC }) {
+export function Gauge({ label, value, ideal, range }) {
   const inRange = value >= range[0] && value <= range[1];
   const color   = inRange ? C.green : C.red;
 

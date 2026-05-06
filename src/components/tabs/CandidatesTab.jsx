@@ -1,32 +1,26 @@
 // src/components/tabs/CandidatesTab.jsx
 
+const C = {
+  bg: "#07090f", panel: "#0d1117", panel2: "#111827",
+  border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed",
+  green: "#10b981", red: "#ef4444", yellow: "#f59e0b",
+  orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280",
+};
+
 export default function CandidatesTab({
   candidates,
   selected,
   mitigated,
   mitigating,
-  searchText,
-  filterGender,
-  filterEducation,
-  filterOutcome,
-  sortKey,
-  genderOptions,
-  educationOptions,
-  onSearchTextChange,
-  onFilterGenderChange,
-  onFilterEducationChange,
-  onFilterOutcomeChange,
-  onSortKeyChange,
   onSelectCandidate,
   onRegenerate,
   onMitigate,
   onRemoveMitigation,
-  C,
 }) {
   return (
     <div>
       {/* Toolbar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
         <span style={{ fontSize: 11, color: C.muted }}>
           {candidates.filter(c => c.hired).length} hired / {candidates.length} total · Click any card for explanation
         </span>
@@ -56,53 +50,6 @@ export default function CandidatesTab({
         </div>
       </div>
 
-      {/* Filters */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto auto", gap: 10, marginBottom: 16, alignItems: "center", rowGap: 10 }}>
-        <input
-          value={searchText}
-          onChange={e => onSearchTextChange(e.target.value)}
-          placeholder="Search name, gender, ethnicity, education"
-          style={{ width: "100%", background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 12px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
-        />
-        <select
-          value={filterGender}
-          onChange={e => onFilterGenderChange(e.target.value)}
-          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
-        >
-          {genderOptions.map(option => (
-            <option key={option} value={option}>{option === "all" ? "Gender: All" : option}</option>
-          ))}
-        </select>
-        <select
-          value={filterEducation}
-          onChange={e => onFilterEducationChange(e.target.value)}
-          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
-        >
-          {educationOptions.map(option => (
-            <option key={option} value={option}>{option === "all" ? "Education: All" : option}</option>
-          ))}
-        </select>
-        <select
-          value={filterOutcome}
-          onChange={e => onFilterOutcomeChange(e.target.value)}
-          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
-        >
-          <option value="all">Outcome: All</option>
-          <option value="hired">Hired</option>
-          <option value="rejected">Rejected</option>
-        </select>
-        <select
-          value={sortKey}
-          onChange={e => onSortKeyChange(e.target.value)}
-          style={{ background: C.panel2, border: `1px solid ${C.border}`, color: C.text, padding: "8px 10px", borderRadius: 8, fontSize: 11, fontFamily: "monospace" }}
-        >
-          <option value="scoreDesc">Sort: Score ↓</option>
-          <option value="scoreAsc">Sort: Score ↑</option>
-          <option value="expDesc">Sort: Experience ↓</option>
-          <option value="expAsc">Sort: Experience ↑</option>
-        </select>
-      </div>
-
       {/* Candidate grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))", gap: 10 }}>
         {candidates.map(c => (
@@ -121,7 +68,7 @@ export default function CandidatesTab({
           >
             {/* Name + badge */}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ fontWeight: 700, fontSize: 12 }}>{c.name}</span>
+              <span style={{ fontWeight: 700, fontSize: 12, color: C.text }}>{c.name}</span>
               <span style={{
                 fontSize: 10, fontWeight: 700, padding: "2px 6px", borderRadius: 4,
                 background: c.hired ? C.green + "22" : C.red + "22",
@@ -137,7 +84,7 @@ export default function CandidatesTab({
             </div>
 
             {/* Quick stats */}
-            <div style={{ display: "flex", gap: 10, fontSize: 10 }}>
+            <div style={{ display: "flex", gap: 10, fontSize: 10, color: C.text }}>
               <span>GPA <b style={{ color: C.accent }}>{c.gpa}</b></span>
               <span>Exp <b style={{ color: C.accent }}>{c.years_exp}y</b></span>
               <span>Tech <b style={{ color: C.accent }}>{c.technical_skills}</b></span>

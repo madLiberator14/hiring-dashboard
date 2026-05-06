@@ -1,11 +1,11 @@
 // src/App.jsx
+
 // Main orchestrator — connected to real Python ML backend
 // Falls back to simulation if backend is offline
 
 import { useState, useEffect } from "react";
-import C from "./theme";
 import { generateCandidates, scoreBiased, scoreFair, computeFairness, getSHAP, getLIME } from "./utils/dataUtils";
-import { checkHealth, fetchCandidates, fetchFairness, fetchSHAP, fetchLIME, fetchAI } from "./utils/api";
+import { checkHealth, fetchCandidates, fetchFairness, fetchSHAP, fetchLIME } from "./utils/api";
 
 import CandidatesTab  from "./components/tabs/CandidatesTab";
 import UploadTab      from "./components/tabs/UploadTab";
@@ -13,6 +13,9 @@ import FairnessTab    from "./components/tabs/FairnessTab";
 import ExplainTab     from "./components/tabs/ExplainTab";
 import MitigationTab  from "./components/tabs/MitigationTab";
 import ChatTab        from "./components/tabs/ChatTab";
+
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
+
 
 const TABS = [
   ["candidates", "👥 Candidates"],
@@ -131,11 +134,10 @@ ${shapData.slice(0, 5).map(s => `  ${s.feature}: ${typeof s.value === "number" ?
 Write 4-5 sentences: (1) Main merit factors driving this decision. (2) How bias factors impacted the score. (3) What mitigation did or would do. (4) One concrete recommendation for fairer hiring.`;
 
     try {
-      const data = await fetchAI({ model: "mock", max_tokens: 300, temperature: 0.7, prompt });
+      const res  = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] }) });
+      const data = await res.json();
       setExplanation(data.content?.[0]?.text || "Unable to generate explanation.");
-    } catch (err) {
-      setExplanation(err.message || "Error connecting to explanation service.");
-    }
+    } catch { setExplanation("Error connecting to explanation service."); }
     setLoadingExplain(false);
   }
 

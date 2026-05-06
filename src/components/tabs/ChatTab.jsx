@@ -1,6 +1,11 @@
 // src/components/tabs/ChatTab.jsx
 
+
 import { useRef, useEffect, useState } from "react";
+import { fetchAI } from "../../utils/api";
+
+const C = { bg: "#07090f", panel: "#0d1117", panel2: "#111827", border: "#1a2535", accent: "#00d4ff", accent2: "#7c3aed", green: "#10b981", red: "#ef4444", yellow: "#f59e0b", orange: "#f97316", text: "#e2e8f0", muted: "#4b5563", muted2: "#6b7280" };
+
 
 const SUGGESTIONS = [
   "What does DIR < 0.8 mean?",
@@ -13,7 +18,7 @@ const SUGGESTIONS = [
   "What is a black-box AI?",
 ];
 
-export default function ChatTab({ candidates, fairness, fairnessBefore, fairnessAfter, mitigated, C }) {
+export default function ChatTab({ candidates, fairness, fairnessBefore, fairnessAfter, mitigated }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [chatInput,   setChatInput]   = useState("");
   const [chatLoading, setChatLoading] = useState(false);
@@ -38,20 +43,15 @@ Before mitigation DIR=${fairnessBefore?.dir}, After=${fairnessAfter?.dir}.
 Be educational, reference SHAP, LIME, AIF360, Fairlearn, DIR/SPD/EOD concepts. Keep answers to 3-5 sentences.`;
 
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: sys,
-          messages: newHistory,
-        }),
+      const data = await fetchAI({
+        model: "mock",
+        max_tokens: 300,
+        temperature: 0.7,
+        messages: newHistory,
       });
-      const data = await res.json();
       setChatHistory([...newHistory, { role: "assistant", content: data.content?.[0]?.text || "Error." }]);
-    } catch {
-      setChatHistory([...newHistory, { role: "assistant", content: "Connection error." }]);
+    } catch (err) {
+      setChatHistory([...newHistory, { role: "assistant", content: err.message || "Connection error." }]);
     }
     setChatLoading(false);
   }
@@ -95,7 +95,7 @@ Be educational, reference SHAP, LIME, AIF360, Fairlearn, DIR/SPD/EOD concepts. K
             }}
           >
             <div style={{ fontSize: 9, color: C.muted, marginBottom: 4, textTransform: "uppercase", letterSpacing: 1 }}>
-              {msg.role === "user" ? "YOU" : "AI AUDITOR"}
+              {msg.role === "user" ? "YOU" : "AI AUDITOR (SIMULATED)"}
             </div>
             {msg.content}
           </div>
